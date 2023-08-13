@@ -1,1 +1,127 @@
 # AHB-to-APB_Bridge-Design
+
+This repository offers a comprehensive collection of Verilog netlist code aimed at the design and verification of an AHB (Advanced High-Performance Bus) to APB (Advanced Peripheral Bus) bridge. Developed with a focus on precision and reliability, this project demonstrates a robust communication bridge between the two distinct bus protocols.
+
+The contents and order of accessing the repo files are:
+- ##### 1) AHB_Slave_Interface.v
+- ##### 2) APB_Interface.v
+- ##### 3) APB_Controller.v
+- ##### 4) AHB_Master.v
+- ##### 5) bridge_top.v
+
+## About the AMBA Buses
+
+The Advanced Microcontroller Bus Architecture (AMBA) specification defines an on-chip communications standard for designing high-performance embedded microcontrollers.
+Three distinct buses are defined within the AMBA specification:
+- Advanced High-performance Bus (AHB)
+- Advanced System Bus (ASB)
+- Advanced Peripheral Bus (APB).
+
+### Advanced High-performance Bus (AHB)
+
+The AMBA AHB is for high-performance, high clock frequency system modules.
+The AHB acts as the high-performance system backbone bus. AHB supports the
+efficient connection of processors, on-chip memories and off-chip external memory
+interfaces with low-power peripheral macrocell functions. AHB is also specified to
+ensure ease of use in an efficient design flow using synthesis and automated test
+techniques.
+
+### Advanced System Bus (ASB)
+
+The AMBA ASB is for high-performance system modules.
+AMBA ASB is an alternative system bus suitable for use where the high-performance
+features of AHB are not required. ASB also supports the efficient connection of
+processors, on-chip memories and off-chip external memory interfaces with low-power
+peripheral macrocell functions.
+
+### Advanced Peripheral Bus (APB)
+
+The AMBA APB is for low-power peripherals.
+AMBA APB is optimized for minimal power consumption and reduced interface
+complexity to support peripheral functions. APB can be used in conjunction with either
+version of the system bus.
+
+The overall architecture looks like the following:
+
+![AMBA System](https://user-images.githubusercontent.com/91010702/194475317-68a7f60d-65ea-48de-a13a-fd85e25c364b.png)
+
+## Basic Terminology
+
+#### Bus cycle 
+A bus cycle is a basic unit of one bus clock period and for the
+purpose of AMBA AHB or APB protocol descriptions is defined
+from rising-edge to rising-edge transitions. 
+
+#### Bus transfer 
+An AMBA ASB or AHB bus transfer is a read or write operation of a data object, which may take one or more bus cycles. The bus
+transfer is terminated by a completion response from the
+addressed slave.
+An AMBA APB bus transfer is a read or write operation
+of a data object, which always requires two bus cycles.
+
+#### Burst operation 
+A burst operation is defined as one or more data transactions,
+initiated by a bus master, which have a consistent width of
+transaction to an incremental region of address space. The
+increment step per transaction is determined by the width of
+transfer (byte, halfword, word). No burst operation is supported
+on the APB.
+
+##  AMBA Signals
+
+### AMBA AHB Signals
+
+| Name | Source | Description |
+| ----------- | ----------- |  ----------- |
+| HCLK | Clock source |  This clock times all bus transfers. All signal timings are related to the rising edge of HCLK. |
+| HRESETn | Reset controller | The bus reset signal is active LOW and is used to reset the system and the bus.This is the only active LOW signal. |
+| HADDR[31:0] | Master | The 32-bit system address bus.
+...
+
+## Implementation 
+
+### Objective
+
+To design and simulate a synthesizable AHB to APB bridge interface using Verilog and run single read and single write tests using AHB Master and APB Slave testbenches.
+The bridge unit converts system bus transfers into APB transfers and performs the following functions: 
+- Latches the address and holds it valid throughout the transfer.
+- Decodes the address and generates a peripheral select, PSELx. Only one select signal can be active during a transfer.
+- Drives the data onto the APB for a write transfer.
+- Drives the APB data onto the system bus for a read transfer.
+- Generates a timing strobe, PENABLE, for the transfer
+- Can implement single read and write operations successfully.
+
+The diagram below shows the interface:
+
+![APB Bridge](https://user-images.githubusercontent.com/91010702/194486314-3df5f435-e9f7-43a7-bd94-d5e2070f09c0.png)
+
+### Basic Implementation Tools
+
+- HDL Used : Verilog
+- Simulator Tool Used: ModelSIM
+- Synthesis Tool Used: Quartus Prime
+- Family: Cyclone V
+- Device: 5CSXFC6D6F31I7ES
+
+### Design Modules
+
+#### AHB Slave Interface
+
+An AHB bus slave responds to transfers initiated by bus masters within the system. The 
+slave uses a HSELx select signal from the decoder to determine when it should respond 
+to a bus transfer. All other signals required for the transfer, such as the address and 
+control information, will be generated by the bus master.
+
+#### APB Controller
+
+The AHB to APB bridge comprises a state machine, which is used to control the 
+generation of the APB and AHB output signals, and the address decoding logic which 
+is used to generate the APB peripheral select lines.
+
+## Notes  
+ 
+**The design files are attached in the repository along with the AHB Master and APB Slave which generates the appropriate signals. Only the Bridge is synthesizable and other modules are used as testbenches only to generate the necessary read/write operations. Below are the screenshots from the synthesis and the simulator tool**
+
+# Simulation Results
+
+It consists of a write operation followed by a read operation on the AHB Bus which is successfully mapped
