@@ -3,11 +3,11 @@
 This repository offers a comprehensive collection of Verilog netlist code aimed at the design and verification of an AHB (Advanced High-Performance Bus) to APB (Advanced Peripheral Bus) bridge. Developed with a focus on precision and reliability, this project demonstrates a robust communication bridge between the two distinct bus protocols.
 
 The contents and order of accessing the repo files are:
-- ##### 1) AHB_Slave_Interface.v
-- ##### 2) APB_Interface.v
-- ##### 3) APB_Controller.v
-- ##### 4) AHB_Master.v
-- ##### 5) bridge_top.v
+- ##### 1) AHB_Slave_Interface_.v
+- ##### 2) APB_Interface_.v
+- ##### 3) APB_Controller_.v
+- ##### 4) AHB_Master_.v
+- ##### 5) bridge_top_.v
 
 ## About the AMBA Buses
 
